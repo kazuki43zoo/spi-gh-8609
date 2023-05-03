@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -313,7 +314,7 @@ public abstract class TcpConnectionSupport implements TcpConnection {
   public void registerSender(@Nullable TcpSender senderToRegister) {
     if (senderToRegister != null) {
       this.senders.add(senderToRegister);
-      senderToRegister.addNewConnection(this);
+      senderToRegister.addNewConnection(getLastWrapper());
     }
   }
 
@@ -327,7 +328,7 @@ public abstract class TcpConnectionSupport implements TcpConnection {
   public void registerSenders(List<TcpSender> sendersToRegister) {
     this.senders.addAll(sendersToRegister);
     for (TcpSender sender : sendersToRegister) {
-      sender.addNewConnection(this);
+      sender.addNewConnection(getLastWrapper());
     }
   }
 
@@ -431,6 +432,18 @@ public abstract class TcpConnectionSupport implements TcpConnection {
    */
   public void setWrapper(TcpConnectionSupport wrapper) {
     this.wrapper = wrapper;
+  }
+
+  /**
+   * Get the {@link TcpConnectionSupport} that wrapping at last.
+   * <p>
+   * This method add for fixing the <a href="https://github.com/spring-projects/spring-integration/issues/8609">gh-8609</a>.
+   * </p>
+   *
+   * @return the TcpConnectionSupport that wrapping at last
+   */
+  TcpConnectionSupport getLastWrapper() {
+    return Optional.ofNullable(wrapper).map(TcpConnectionSupport::getLastWrapper).orElse(this);
   }
 
   public String getConnectionFactoryName() {
