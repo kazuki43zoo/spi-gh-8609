@@ -106,26 +106,26 @@ public class SpiGh8609Application {
     }
   }
 
-// The patch interceptor for binding a connection that wrapped all interceptor to TcpSender(in this case TcpSendingMessageHandler)
-public static class PatchInterceptor extends TcpConnectionInterceptorSupport {
+  // The patch interceptor for binding a connection that wrapped all interceptor to TcpSender(in this case TcpSendingMessageHandler)
+  public static class PatchInterceptor extends TcpConnectionInterceptorSupport {
 
-  private PatchInterceptor(ApplicationEventPublisher publisher) {
-    super(publisher);
-  }
+    private PatchInterceptor(ApplicationEventPublisher publisher) {
+      super(publisher);
+    }
 
-  @Override public void addNewConnection(TcpConnection connection) {
-    super.addNewConnection(connection);
-    Optional.ofNullable(getSender()).ifPresent(x -> x.addNewConnection(getTheConnection()));
-  }
+    @Override public void addNewConnection(TcpConnection connection) {
+      super.addNewConnection(connection);
+      Optional.ofNullable(getSender()).ifPresent(x -> x.addNewConnection(getTheConnection()));
+    }
 
-  static class Factory extends ApplicationObjectSupport implements TcpConnectionInterceptorFactory {
+    static class Factory extends ApplicationObjectSupport implements TcpConnectionInterceptorFactory {
 
-    @Override public TcpConnectionInterceptorSupport getInterceptor() {
-      return new PatchInterceptor(obtainApplicationContext());
+      @Override public TcpConnectionInterceptorSupport getInterceptor() {
+        return new PatchInterceptor(obtainApplicationContext());
+      }
+
     }
 
   }
-
-}
 
 }
