@@ -114,8 +114,13 @@ public class SpiGh8609Application {
     }
 
     @Override public void addNewConnection(TcpConnection connection) {
-      super.addNewConnection(connection);
-      Optional.ofNullable(getSender()).ifPresent(x -> x.addNewConnection(getTheConnection()));
+      //      Old patch code
+      //      super.addNewConnection(connection);
+      //      Optional.ofNullable(getSender()).ifPresent(x -> x.addNewConnection(getTheConnection()));
+
+      // New patch code
+      // Call addNewConnection of TcpSender with wrapped connection(interceptor) instead of passed connection using method argument
+      getSenders().forEach(x -> x.addNewConnection(getTheConnection()));
     }
 
     static class Factory extends ApplicationObjectSupport implements TcpConnectionInterceptorFactory {
