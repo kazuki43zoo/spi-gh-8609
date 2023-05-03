@@ -106,7 +106,7 @@ public class SpiGh8609Application {
     }
   }
 
-// The batch interceptor for binding a connection that wrapped all interceptor to TcpSender(in this case TcpSendingMessageHandler)
+// The patch interceptor for binding a connection that wrapped all interceptor to TcpSender(in this case TcpSendingMessageHandler)
 public static class PatchInterceptor extends TcpConnectionInterceptorSupport {
 
   private PatchInterceptor(ApplicationEventPublisher publisher) {
