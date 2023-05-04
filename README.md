@@ -23,7 +23,7 @@ public AbstractServerConnectionFactory serverConnectionFactory(
 private TcpConnectionInterceptorFactoryChain tcpConnectionInterceptorFactoryChain(
     List<TcpConnectionInterceptorFactory> tcpConnectionInterceptorFactories) {
   TcpConnectionInterceptorFactoryChain chain = new TcpConnectionInterceptorFactoryChain();
-  chain.setInterceptor(tcpConnectionInterceptorFactories.toArray(new TcpConnectionInterceptorFactory[0]));
+  chain.setInterceptors(tcpConnectionInterceptorFactories.toArray(new TcpConnectionInterceptorFactory[0]));
   return chain;
 }
 
