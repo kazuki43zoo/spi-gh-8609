@@ -3,8 +3,8 @@ Repro project for spring-integration issue #8609
 
 ## How to use the patch interceptor
 
-This project provide the workaround sample interceptor(`SpringIntegrationIssue8609PatchInterceptor`) for fix this issue.
-The `SpringIntegrationIssue8609PatchInterceptor`'s factory should be applied to the `TcpConnectionInterceptorFactoryChain` at last.
+This project provide the workaround sample interceptor([`SpringIntegrationIssue8609PatchInterceptor`](https://github.com/kazuki43zoo/spi-gh-8609/blob/main/src/main/java/com/example/spigh8609/SpringIntegrationIssue8609PatchInterceptor.java)) for fix this issue.
+The [`SpringIntegrationIssue8609PatchInterceptor`](https://github.com/kazuki43zoo/spi-gh-8609/blob/main/src/main/java/com/example/spigh8609/SpringIntegrationIssue8609PatchInterceptor.java)'s factory should be applied to the `TcpConnectionInterceptorFactoryChain` at last.
 
 Introduce sample bean definitions that applied patch interceptor to your application.
 
