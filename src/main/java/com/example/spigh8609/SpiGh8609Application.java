@@ -31,20 +31,19 @@ public class SpiGh8609Application {
   }
 
   @Bean
-  public TcpConnectionInterceptorFactoryChain tcpConnectionInterceptorFactoryChain(
+  public AbstractServerConnectionFactory serverConnectionFactory(
+      List<TcpConnectionInterceptorFactory> tcpConnectionInterceptorFactories) {
+    return Tcp.netServer(1234)
+        .deserializer(TcpCodecs.crlf())
+        .interceptorFactoryChain(tcpConnectionInterceptorFactoryChain(tcpConnectionInterceptorFactories))
+        .get();
+  }
+
+  private TcpConnectionInterceptorFactoryChain tcpConnectionInterceptorFactoryChain(
       List<TcpConnectionInterceptorFactory> tcpConnectionInterceptorFactories) {
     TcpConnectionInterceptorFactoryChain chain = new TcpConnectionInterceptorFactoryChain();
     chain.setInterceptor(tcpConnectionInterceptorFactories.toArray(new TcpConnectionInterceptorFactory[0]));
     return chain;
-  }
-
-  @Bean
-  public AbstractServerConnectionFactory serverConnectionFactory(
-      TcpConnectionInterceptorFactoryChain chain) {
-    return Tcp.netServer(1234)
-        .deserializer(TcpCodecs.crlf())
-        .interceptorFactoryChain(chain)
-        .get();
   }
 
   @Bean
