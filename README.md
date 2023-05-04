@@ -1,0 +1,69 @@
+# spi-gh-8609
+Repro project for spring-integration issue #8609 
+
+## How to use the patch interceptor
+
+This project provide the workaround sample interceptor(`SpringIntegrationIssue8609PatchInterceptor`) for fix this issue.
+The `SpringIntegrationIssue8609PatchInterceptor`'s factory should be applied to the `TcpConnectionInterceptorFactoryChain` at last.
+
+Introduce sample bean definitions that applied patch interceptor to your application.
+
+### Define beans with Java Configuration
+
+```java
+@Bean
+public AbstractServerConnectionFactory serverConnectionFactory(
+    List<TcpConnectionInterceptorFactory> tcpConnectionInterceptorFactories) {
+  return Tcp.netServer(1234)
+      .deserializer(TcpCodecs.crlf())
+      .interceptorFactoryChain(tcpConnectionInterceptorFactoryChain(tcpConnectionInterceptorFactories))
+      .get();
+}
+
+private TcpConnectionInterceptorFactoryChain tcpConnectionInterceptorFactoryChain(
+    List<TcpConnectionInterceptorFactory> tcpConnectionInterceptorFactories) {
+  TcpConnectionInterceptorFactoryChain chain = new TcpConnectionInterceptorFactoryChain();
+  chain.setInterceptor(tcpConnectionInterceptorFactories.toArray(new TcpConnectionInterceptorFactory[0]));
+  return chain;
+}
+
+@Bean
+@Order(1)
+public TcpConnectionInterceptorFactory myInterceptor1() {
+  return new MyInterceptor1.Factory();
+}
+
+@Bean
+@Order(2)
+public TcpConnectionInterceptorFactory myInterceptor2() {
+  return new MyInterceptor2.Factory();
+}
+
+@Bean
+@Order(3) // ★★★Should set order at last★★★
+public TcpConnectionInterceptorFactory patchInterceptor() {
+  return new SpringIntegrationIssue8609PatchInterceptor.Factory();
+}
+
+```
+
+### Define beans with XML Configuration
+
+```xml
+<ip:tcp-connection-factory id="serverConnectionFactory"
+  type="server"
+  port="1234"
+  serializer="crLfSerializer"
+  deserializer="crLfSerializer"
+  interceptor-factory-chain="tcpConnectionInterceptorFactoryChain" />
+
+<bean id="tcpConnectionInterceptorFactoryChain" class="org.springframework.integration.ip.tcp.connection.TcpConnectionInterceptorFactoryChain">
+  <property name="interceptors">
+    <array>
+      <bean class="com.example.MyInterceptor1.Factory"/>
+      <bean class="com.example.MyInterceptor2.Factory"/>
+      <bean class="com.example.spigh8609.SpringIntegrationIssue8609PatchInterceptor.Factory"/> <!-- ★★★Should define the bean at last★★★ -->
+    </array>
+  </property>
+</bean>
+```
