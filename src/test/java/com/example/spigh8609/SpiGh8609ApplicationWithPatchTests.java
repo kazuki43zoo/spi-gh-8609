@@ -90,7 +90,7 @@ class SpiGh8609ApplicationWithPatchTests {
     @Order(3)
     // Apply patch interceptor for binding a connection that wrapped all interceptor to TcpSender(in this case TcpSendingMessageHandler)
     public TcpConnectionInterceptorFactory patchInterceptor() {
-      return new SpiGh8609Application.PatchInterceptor.Factory();
+      return new SpringIntegrationIssue8609PatchInterceptor.Factory();
     }
   }
 }
