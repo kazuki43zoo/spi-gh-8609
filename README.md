@@ -1,5 +1,5 @@
 # spi-gh-8609
-Repro project for spring-integration issue #8609 
+Repro project for spring-integration issue [#8609](https://github.com/spring-projects/spring-integration/issues/8609).
 
 ## How to use the patch interceptor
 
