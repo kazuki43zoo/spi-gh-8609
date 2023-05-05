@@ -1,6 +1,10 @@
 # spi-gh-8609
 Repro project for spring-integration issue https://github.com/spring-projects/spring-integration/issues/8609.
 
+> **NOTE:**
+>
+> This issue will be fixed via 6.1.0, 6.0.6 and 5.5.18.
+
 ## How to use the patch interceptor
 
 This project provide the workaround sample interceptor([`SpringIntegrationIssue8609PatchInterceptor`](https://github.com/kazuki43zoo/spi-gh-8609/blob/main/src/main/java/com/example/spigh8609/SpringIntegrationIssue8609PatchInterceptor.java)) for fix this issue.
