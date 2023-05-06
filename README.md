@@ -71,3 +71,7 @@ public TcpConnectionInterceptorFactory patchInterceptor() {
   </property>
 </bean>
 ```
+
+## Articles
+
+* [Qiita(Japanese only)](https://qiita.com/kazuki43zoo/items/870486eff86aac3b1610)
